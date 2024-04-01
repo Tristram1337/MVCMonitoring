@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCMonitoring.Models;
 using MVCMonitoring.Data;
+using MVCMonitoring.Models;
 
 namespace MVCMonitoring.Controllers
 {
     [ApiController]
-    [Route("Create_Station")]
+    [Route("Create")]
     public class StationCreateController : Controller
     {
         private readonly ApplicationDbContext _context;

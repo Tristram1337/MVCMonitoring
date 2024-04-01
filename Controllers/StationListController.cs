@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MVCMonitoring.Data;
-
 
 namespace MVCMonitoring.Controllers
 {
     [ApiController]
-    [Route("List_of_Stations")]
+    [Route("List")]
     public class StationListController : Controller
     {
         private readonly ApplicationDbContext _context;

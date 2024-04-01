@@ -21,6 +21,7 @@ namespace MVCMonitoring.Controllers
             var stations = _context.Stations.ToList();
             return Ok(stations);
 
+
         }
         [HttpPost("add-stations")]
         public IActionResult AddStation(MonitoringStation station)
@@ -49,7 +50,6 @@ namespace MVCMonitoring.Controllers
                 location = $"/api/station/{newStationId}"
             });
         }
-
 
         [HttpGet("get-station/{id}")]
         public IActionResult GetStation(int id)
