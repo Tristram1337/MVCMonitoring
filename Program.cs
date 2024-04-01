@@ -38,7 +38,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "Station",
+    name: "stations",
     pattern: "{controller=Station}/{action=Create}/{id?}");
 
 app.MapControllerRoute(
