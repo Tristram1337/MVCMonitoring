@@ -2,15 +2,13 @@
 
 namespace MVCMonitoring.Models
 {
-    public class Value
+    public class Measurements
     {
         [Key]
         public int Id { get; set; }
 
-        public int Val { get; set; }
-
         public DateTime DateTime { get; set; }
 
-        public virtual Station Station { get; set; }
+        public virtual MonitoringStation Station { get; set; }
     }
 }

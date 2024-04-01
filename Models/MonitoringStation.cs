@@ -2,7 +2,7 @@
 
 namespace MVCMonitoring.Models
 {
-    public class Station
+    public class MonitoringStation
     {
         [Key]
         public int Id { get; set; }

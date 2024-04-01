@@ -16,6 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,14 +39,22 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "stations",
-    pattern: "{controller=Station}/{action=Create}/{id?}");
+//app.MapControllerRoute(
+//    name: "createStation",
+//    pattern: "{controller=StationFrontend}/{action=CreateStation}/{id?}");
+
+//app.MapControllerRoute(
+//    name: "indexStation",
+//    pattern: "{controller=StationFrontend}/{action=Index}/{id?}");
+
+
+//app.MapControllerRoute(
+//    name: "stations",
+//    pattern: "{controller=StationCreate}/{action=Create}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.MapRazorPages();
 

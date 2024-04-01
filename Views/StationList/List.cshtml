@@ -1,0 +1,29 @@
+﻿@model MVCMonitoring.Models.MonitoringStation
+@{
+    ViewData["Title"] = "List";
+}
+
+
+<h2>Existing Stations</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Flood Level</th>
+            <th>Drought Level</th>
+            <th>Timeout</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var station in ViewBag.Stations)
+        {
+            <tr>
+                <td>@station.Title</td>
+                <td>@station.FloodLevel</td>
+                <td>@station.DroughtLevel</td>
+                <td>@station.TimeOutInMinutes</td>
+            </tr>
+        }
+    </tbody>
+</table>

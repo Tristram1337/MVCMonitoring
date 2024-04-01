@@ -5,30 +5,25 @@ using MVCMonitoring.Models;
 namespace MVCMonitoring.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class StationController : Controller
+    [Route("api")]
+    public class StationAPIController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        public StationController(ApplicationDbContext context)
+        public StationAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         [HttpGet("get-stations")]
-        public IActionResult GetListOfStations()
+        public IActionResult GetStations()
         {
             var stations = _context.Stations.ToList();
             return Ok(stations);
-        }
 
+        }
         [HttpPost("add-stations")]
-        public IActionResult AddStation(Station station)
+        public IActionResult AddStation(MonitoringStation station)
         {
             var existingStation = _context.Stations.FirstOrDefault(x => x.Title.Equals(station.Title));
 
@@ -55,6 +50,7 @@ namespace MVCMonitoring.Controllers
             });
         }
 
+
         [HttpGet("get-station/{id}")]
         public IActionResult GetStation(int id)
         {
@@ -67,18 +63,24 @@ namespace MVCMonitoring.Controllers
             return Ok(station);
         }
 
-        [HttpPost]
-        public IActionResult CreateStation(Station station)
+        [HttpPut("update-station/{id}")]
+        public IActionResult UpdateStation(int id, Measurements newValue)
         {
-            if (!ModelState.IsValid)
+            var existingStation = _context.Stations.Find(id);
+
+            if (existingStation == null)
             {
-                return View(station);
+                return NotFound();
             }
 
-            _context.Stations.Add(station);
-            _context.SaveChanges();
+            if (newValue != null)
+            {
+                newValue.Station = existingStation;
+                _context.Values.Add(newValue);
+                _context.SaveChanges();
+            }
 
-            return RedirectToAction(nameof(Index)); 
+            return Ok(existingStation);
         }
     }
 }
