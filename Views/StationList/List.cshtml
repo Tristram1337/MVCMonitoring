@@ -1,28 +1,51 @@
-﻿@model MVCMonitoring.Models.MonitoringStation
+﻿@model IEnumerable<MVCMonitoring.Models.MonitoringStation>
 @{
     ViewData["Title"] = "List";
 }
+                      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<h2 class="fw-bold mb-4">Existing Stations</h2>
 
-<h2>Existing Stations</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Flood Level</th>
-            <th>Drought Level</th>
-            <th>Timeout</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var station in ViewBag.Stations)
-        {
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@station.Title</td>
-                <td>@station.FloodLevel</td>
-                <td>@station.DroughtLevel</td>
-                <td>@station.TimeOutInMinutes</td>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Location</th>
+                <th scope="col">Flood Level</th>
+                <th scope="col">Drought Level</th>
+                <th scope="col">Timeout</th>
+                <th scope="col">Date & Time</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var station in Model)
+            {
+                if (station.Measurements != null && station.Measurements.Any())
+                {
+                    foreach (var measurement in station.Measurements)
+                    {
+                        <tr>
+                            <td>@station.Id</td>
+                            <td>@station.Title</td>
+                            <td>@station.Location</td>
+                            <td>@measurement.FloodLevel</td>
+                            <td>@measurement.DroughtLevel</td>
+                            <td>@measurement.TimeOutInMinutes</td>
+                            <td>@measurement.DateTime</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>@station.Id</td>
+                        <td>@station.Title</td>
+                        <td>@station.Location</td>
+                        <td colspan="4">No measurements available</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

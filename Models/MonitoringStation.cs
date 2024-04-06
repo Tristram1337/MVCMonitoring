@@ -10,17 +10,9 @@ namespace MVCMonitoring.Models
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
 
-        [Required]
-        [Range(1, 100)]
-        public int FloodLevel { get; set; }
+        [Required(ErrorMessage = "Location is required")]
+        public string Location { get; set; }
 
-        [Required]
-        [Range(1, 100)]
-
-        public int DroughtLevel { get; set; }
-
-        [Required]
-        public int TimeOutInMinutes { get; set; }
-
+        public virtual ICollection<Measurement> Measurements { get; set; }
     }
 }

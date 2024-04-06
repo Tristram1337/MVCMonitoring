@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVCMonitoring.Data;
 using MVCMonitoring.Models;
 
@@ -6,23 +7,17 @@ namespace MVCMonitoring.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class StationAPIController : Controller
+    public class StationAPIController(ApplicationDbContext context) : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public StationAPIController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         [HttpGet("get-stations")]
         public IActionResult GetStations()
         {
-            var stations = _context.Stations.ToList();
+            var stations = _context.Stations.Include(s => s.Measurements).ToList();
             return Ok(stations);
-
-
         }
+
         [HttpPost("add-stations")]
         public IActionResult AddStation(MonitoringStation station)
         {
@@ -30,26 +25,21 @@ namespace MVCMonitoring.Controllers
 
             if (existingStation != null)
             {
-                existingStation.FloodLevel = station.FloodLevel;
-                existingStation.DroughtLevel = station.DroughtLevel;
-                existingStation.TimeOutInMinutes = station.TimeOutInMinutes;
-
-                _context.SaveChanges();
-
-                return Ok("Station data has been updated.");
+                return Conflict("A station with this title already exists.");
             }
 
-            _context.Stations.Add(station);
+            var newStation = new MonitoringStation
+            {
+                Title = station.Title,
+                Location = station.Location
+            };
+
+            _context.Stations.Add(newStation);
             _context.SaveChanges();
 
-            int newStationId = station.Id;
-
-            return CreatedAtAction(nameof(GetStation), new { id = newStationId }, new
-            {
-                message = "Station has been successfully added",
-                location = $"/api/station/{newStationId}"
-            });
+            return CreatedAtAction(nameof(GetStation), new { id = newStation.Id }, newStation);
         }
+
 
         [HttpGet("get-station/{id}")]
         public IActionResult GetStation(int id)
@@ -64,7 +54,7 @@ namespace MVCMonitoring.Controllers
         }
 
         [HttpPut("update-station/{id}")]
-        public IActionResult UpdateStation(int id, Measurements newValue)
+        public IActionResult UpdateStation(int id, MonitoringStation updatedStation)
         {
             var existingStation = _context.Stations.Find(id);
 
@@ -73,14 +63,45 @@ namespace MVCMonitoring.Controllers
                 return NotFound();
             }
 
-            if (newValue != null)
-            {
-                newValue.Station = existingStation;
-                _context.Values.Add(newValue);
-                _context.SaveChanges();
-            }
+            existingStation.Title = updatedStation.Title;
+            existingStation.Location = updatedStation.Location;
+            _context.SaveChanges();
 
             return Ok(existingStation);
         }
+
+        [HttpPost("add-measurements/{stationId}")]
+        public IActionResult AddMeasurements(int stationId, ICollection<Measurement> measurements)
+        {
+            var existingStation = _context.Stations.Find(stationId);
+
+            if (existingStation == null)
+            {
+                return NotFound("Station not found.");
+            }
+
+            foreach (var measurement in measurements)
+            {
+                measurement.StationId = stationId;
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _context.Measurements.Add(measurement);
+            }
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to add measurements: {ex.Message}");
+            }
+
+            return Ok("Measurements added successfully.");
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-MVCMonitoring-5e616d29-c7ce-4b3b-8b9c-15e68501e095</UserSecretsId>
   </PropertyGroup>

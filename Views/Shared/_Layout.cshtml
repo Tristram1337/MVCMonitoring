@@ -36,15 +36,32 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StationCreate" asp-action="Create">Create</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Operations
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><h6 class="dropdown-header">Create</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Station" asp-action="Create">Create Station</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Measurement" asp-action="Create">Create Measurement</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header">Update</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Station" asp-action="Update">Update Station</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Measurement" asp-action="Update">Update Measurement</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header">Delete</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Station" asp-action="Delete">Delete Station</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Measurement" asp-action="Delete">Delete Measurement</a></li>
+                            </ul>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StationList" asp-action="List">List of Stations</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
+
             </div>
         </nav>
     </header>

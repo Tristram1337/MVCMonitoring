@@ -12,6 +12,6 @@ namespace MVCMonitoring.Data
         }
 
         public DbSet<MonitoringStation> Stations { get; set; }
-        public DbSet<Measurements> Values { get; set; }
+        public DbSet<Measurement> Measurements { get; set; }
     }
 }

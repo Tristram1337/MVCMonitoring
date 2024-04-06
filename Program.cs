@@ -16,7 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 var app = builder.Build();
 
@@ -38,19 +39,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-//app.MapControllerRoute(
-//    name: "createStation",
-//    pattern: "{controller=StationFrontend}/{action=CreateStation}/{id?}");
-
-//app.MapControllerRoute(
-//    name: "indexStation",
-//    pattern: "{controller=StationFrontend}/{action=Index}/{id?}");
-
-
-//app.MapControllerRoute(
-//    name: "stations",
-//    pattern: "{controller=StationCreate}/{action=Create}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
