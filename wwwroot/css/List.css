@@ -1,0 +1,68 @@
+﻿.station {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+    .station .col-sm {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .station .row {
+        margin-bottom: 0.5rem;
+    }
+
+    .station .btn-measurements {
+        margin-top: 0.5rem;
+    }
+
+.measurements {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+}
+
+    .measurements ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .measurements li {
+        border: none;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+        .measurements li div {
+            margin-right: 2rem;
+        }
+
+        .measurements li strong {
+            margin-right: 0.5rem;
+        }
+
+        .measurements li span {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+.list-group-item {
+    border: none;
+    background-color: transparent;
+}
+
+.btn-measurements {
+    margin: 10px;
+}
+
+.text {
+    font-size: 0.9em;
+}

@@ -1,0 +1,38 @@
+﻿@model MVCMonitoring.Models.MonitoringStation
+@{
+    ViewData["Title"] = "Create Station";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container" style="max-width: 600px;">
+        <h1 class="text-center mt-5">Welcome to the Station Creation Page</h1>
+        <p class="text-center">You are about to create a new monitoring station. Please enter the informations below.</p>
+        <hr />
+        <form asp-action="CreateStationAction" asp-controller="StationOperation" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="Title" class="control-label">Station Title</label>
+                <input id="Title" name="Title" class="form-control" placeholder="Enter stations title" required />
+
+                <label for="Location" class="control-label mt-3">Station Location</label>
+                <input id="Location" name="Location" class="form-control" placeholder="Enter stations location" required />
+
+                <label for="FloodLevel" class="control-label mt-3">Flood Level</label>
+                <input id="FloodLevel" name="FloodLevel" type="text" class="form-control" placeholder="Enter stations flood level" required />
+
+                <label for="DroughtLevel" class="control-label mt-3">Drought Level</label>
+                <input id="DroughtLevel" name="DroughtLevel" type="text" class="form-control" placeholder="Enter stations drought level" required />
+
+                <label for="TimeOutInMinutes" class="control-label mt-3">Timeout In Minutes</label>
+                <input id="TimeOutInMinutes" name="TimeOutInMinutes" type="text" class="form-control" placeholder="Enter stations timeout in minutes" required />
+            </div>
+            <button class="btn btn-primary mt-3" type="submit">Create Station</button>
+        </form>
+    </div>
+    <script src="~/js/CreateStation.js" asp-append-version="true"></script>
+</body>
+</html>

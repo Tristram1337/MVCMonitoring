@@ -1,0 +1,18 @@
+﻿.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 2px 0;
+    text-align: center;
+    background-color: rgba(51, 51, 51, 0.75);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    border-top: 1px solid rgba(68, 68, 68, 0.75);
+}
+
+    .footer .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }

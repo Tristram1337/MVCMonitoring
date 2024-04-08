@@ -9,17 +9,11 @@ namespace MVCMonitoring.Models
 
         [Required]
         [Range(1, 100)]
-        public int FloodLevel { get; set; }
-
-        [Required]
-        [Range(1, 100)]
-        public int DroughtLevel { get; set; }
-
-        [Required]
-        public int TimeOutInMinutes { get; set; }
+        public int WaterLevel { get; set; }
 
         public DateTime DateTime { get; set; }
 
+        [Required]
         public int StationId { get; set; }
 
         public virtual MonitoringStation Station { get; set; }

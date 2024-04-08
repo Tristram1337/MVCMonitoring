@@ -4,6 +4,7 @@ using MVCMonitoring.Data;
 
 namespace MVCMonitoring.Controllers
 {
+    [Route("List")]
     public class StationListController(ApplicationDbContext context) : Controller
     {
         private readonly ApplicationDbContext _context = context;

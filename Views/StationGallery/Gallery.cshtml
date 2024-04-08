@@ -1,0 +1,36 @@
+﻿@model List<string>
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/Gallery.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container py-5">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">State-of-the-Art Gauging Stations</h1>
+            <p class="lead">Welcome to our exclusive gallery showcasing the cutting-edge technology and innovative designs of our gauging stations. Each image captures a unique aspect of our stations, demonstrating our unwavering commitment to precision, reliability, and sustainability.</p>
+            <p class="lead">These stations, often located in the most remote and inaccessible locations, are solar-powered, ensuring sustainable operation even in areas without access to the power grid. Despite the challenging conditions, these stations provide highly precise measurements, ensuring reliable data for our monitoring efforts.</p>
+            <hr class="my-4">
+        </div>
+        <div class="row">
+            @foreach (var image in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <img src="@Url.Content("~/Gallery/" + image)" class="img-fluid" alt="@image">
+                </div>
+            }
+        </div>
+    </div>
+    <div class="overlay" onclick="hideOverlay()">
+        <div class="arrow left" onclick="changeImage(-1); event.stopPropagation();">❮</div>
+        <img src="" id="overlayImage">
+        <div class="arrow right" onclick="changeImage(1); event.stopPropagation();">❯</div>
+    </div>
+    <script src="~/js/Gallery.js" asp-append-version="true"></script>
+</body>
+</html>

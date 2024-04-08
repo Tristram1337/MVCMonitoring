@@ -1,50 +1,103 @@
 ﻿@model IEnumerable<MVCMonitoring.Models.MonitoringStation>
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "List Of Operating Stations";
 }
-<h2 class="fw-bold mb-4">Existing Stations</h2>
-
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Title</th>
-                <th scope="col">Location</th>
-                <th scope="col">Flood Level</th>
-                <th scope="col">Drought Level</th>
-                <th scope="col">Timeout</th>
-                <th scope="col">Date & Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var station in Model)
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/List.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container py-5">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Operating Stations</h1>
+            <p class="lead">Efficiently Monitor River Levels with Our Advanced System</p>
+            <p>Our system allows you to monitor your stations to keep track of river levels across various locations.</p>
+            <hr class="my-4">
+        </div>
+        @foreach (var station in Model)
+        {
+            var lastMeasurementInWarningZone = false;
+            if (station.Measurements != null && station.Measurements.Any())
             {
-                if (station.Measurements != null && station.Measurements.Any())
+                var lastMeasurement = station.Measurements.Last();
+                if (lastMeasurement.WaterLevel < station.DroughtLevel || lastMeasurement.WaterLevel > station.FloodLevel)
                 {
-                    foreach (var measurement in station.Measurements)
-                    {
-                        <tr>
-                            <td>@station.Id</td>
-                            <td>@station.Title</td>
-                            <td>@station.Location</td>
-                            <td>@measurement.FloodLevel</td>
-                            <td>@measurement.DroughtLevel</td>
-                            <td>@measurement.TimeOutInMinutes</td>
-                            <td>@measurement.DateTime</td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td>@station.Id</td>
-                        <td>@station.Title</td>
-                        <td>@station.Location</td>
-                        <td colspan="4">No measurements available</td>
-                    </tr>
+                    lastMeasurementInWarningZone = true;
                 }
             }
-        </tbody>
-    </table>
-</div>
+            <div class="station">
+                <div class="row mb-3">
+                    <div class="col-sm text">
+                        <strong>Station Id:</strong> @station.Id
+                    </div>
+                    <div class="col-sm text" data-toggle="tooltip" title="@station.Title">
+                        <strong>Title:</strong> @station.Title
+                    </div>
+                    <div class="col-sm text" data-toggle="tooltip" title="@station.Location">
+                        <strong>Location:</strong> @station.Location
+                    </div>
+                    <div class="col-sm text" data-toggle="tooltip" title="@station.FloodLevel">
+                        <strong>Flood Level:</strong> @station.FloodLevel
+                    </div>
+                    <div class="col-sm text" data-toggle="tooltip" title="@station.DroughtLevel">
+                        <strong>Drought Level:</strong> @station.DroughtLevel
+                    </div>
+                    <div class="col-sm text" data-toggle="tooltip" title="@station.TimeOutInMinutes">
+                        <strong>Timeout:</strong> @station.TimeOutInMinutes mins>
+                    </div>
+                    <div class="col-sm-2">
+                        @if (lastMeasurementInWarningZone)
+                        {
+                            <button class="btn btn-sm btn-danger btn-measurements" onclick="toggleMeasurements('@station.Id')">Measurements</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-secondary btn-measurements" onclick="toggleMeasurements('@station.Id')">Measurements</button>
+                        }
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div id="measurements-@station.Id" class="measurements" style="display: none;">
+                            @if (station.Measurements != null && station.Measurements.Count > 0)
+                            {
+                                <ul class="list-group">
+                                    @foreach (var m in station.Measurements)
+                                    {
+                                        <li class="list-group-item">
+                                            <div>
+                                                <strong>Water Level:</strong> <span>@m.WaterLevel</span>
+                                            </div>
+                                            <div>
+                                                <strong>Date & Time:</strong> <span>@m.DateTime</span>
+                                            </div>
+                                            @if (m.WaterLevel < station.DroughtLevel)
+                                            {
+                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Drought Warning:</strong> Water level is below drought level!</span></div>
+                                            }
+                                            else if (m.WaterLevel > station.FloodLevel)
+                                            {
+                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Flood Warning:</strong> Water level is above flood level!</span></div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No measurements available</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="~/js/List.js" asp-append-version="true"></script>
+</body>
+</html>

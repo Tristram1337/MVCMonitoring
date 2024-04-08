@@ -31,7 +31,10 @@ namespace MVCMonitoring.Controllers
             var newStation = new MonitoringStation
             {
                 Title = station.Title,
-                Location = station.Location
+                Location = station.Location,
+                FloodLevel = station.FloodLevel,
+                DroughtLevel = station.DroughtLevel,
+                TimeOutInMinutes = station.TimeOutInMinutes
             };
 
             _context.Stations.Add(newStation);
@@ -65,13 +68,60 @@ namespace MVCMonitoring.Controllers
 
             existingStation.Title = updatedStation.Title;
             existingStation.Location = updatedStation.Location;
+            existingStation.FloodLevel = updatedStation.FloodLevel;
+            existingStation.DroughtLevel = updatedStation.DroughtLevel;
+            existingStation.TimeOutInMinutes = updatedStation.TimeOutInMinutes;
             _context.SaveChanges();
 
             return Ok(existingStation);
         }
 
+        [HttpDelete("delete-station/{id}")]
+        public IActionResult DeleteStation(int id)
+        {
+            var existingStation = _context.Stations.Find(id);
+
+            if (existingStation == null)
+            {
+                return NotFound("Station not found.");
+            }
+
+            _context.Stations.Remove(existingStation);
+            _context.SaveChanges();
+
+            return Ok("Station deleted successfully.");
+        }
+
+        // MEASUREMENTS //
+
+        [HttpGet("get-all-measurements")]
+        public IActionResult GetAllMeasurements()
+        {
+            var allMeasurements = _context.Measurements.ToList();
+
+            if (allMeasurements.Count == 0)
+            {
+                return NotFound("No measurements found.");
+            }
+
+            return Ok(allMeasurements);
+        }
+
+        [HttpGet("get-measurement/{measurementId}")]
+        public IActionResult GetMeasurement(int measurementId)
+        {
+            var existingMeasurement = _context.Measurements.Find(measurementId);
+
+            if (existingMeasurement == null)
+            {
+                return NotFound("Measurement not found.");
+            }
+
+            return Ok(existingMeasurement);
+        }
+
         [HttpPost("add-measurements/{stationId}")]
-        public IActionResult AddMeasurements(int stationId, ICollection<Measurement> measurements)
+        public IActionResult AddMeasurement(int stationId, Measurement measurement)
         {
             var existingStation = _context.Stations.Find(stationId);
 
@@ -80,28 +130,51 @@ namespace MVCMonitoring.Controllers
                 return NotFound("Station not found.");
             }
 
-            foreach (var measurement in measurements)
+            var newMeasurement = new Measurement
             {
-                measurement.StationId = stationId;
+                WaterLevel = measurement.WaterLevel,
+                DateTime = DateTime.UtcNow,
+                StationId = stationId
+            };
 
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                _context.Measurements.Add(measurement);
-            }
+            _context.Measurements.Add(newMeasurement);
+            _context.SaveChanges();
 
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Failed to add measurements: {ex.Message}");
-            }
-
-            return Ok("Measurements added successfully.");
+            return CreatedAtAction(nameof(GetStation), new { id = newMeasurement.Id }, newMeasurement);
         }
 
+        [HttpPut("update-measurement/{measurementId}")]
+        public IActionResult UpdateMeasurement(int measurementId, Measurement updatedMeasurement)
+        {
+            var existingMeasurement = _context.Measurements.Find(measurementId);
+
+            if (existingMeasurement == null)
+            {
+                return NotFound("Measurement not found.");
+            }
+
+            existingMeasurement.WaterLevel = updatedMeasurement.WaterLevel;
+            existingMeasurement.DateTime = DateTime.UtcNow;
+
+            _context.SaveChanges();
+
+            return Ok("Measurement updated successfully.");
+        }
+
+        [HttpDelete("delete-measurement/{measurementId}")]
+        public IActionResult DeleteMeasurement(int measurementId)
+        {
+            var existingMeasurement = _context.Measurements.Find(measurementId);
+
+            if (existingMeasurement == null)
+            {
+                return NotFound("Measurement not found.");
+            }
+
+            _context.Measurements.Remove(existingMeasurement);
+            _context.SaveChanges();
+
+            return Ok("Measurement deleted successfully.");
+        }
     }
 }

@@ -8,25 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Monitoring Stations</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-        body {
-            background: #f4f4f4;
-        }
-        .jumbotron {
-            background: #555;
-            color: #fff;
-        }
-        .carousel-item img {
-            height: 400px;
-            object-fit: cover;
-        }
-        .carousel-inner {
-            border-radius: 0.4rem;
-        }
-        .btn {
-            margin-top: 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/Index.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container mt-5">
@@ -35,33 +17,32 @@
             <p class="lead"><p>This project was made by <strong>Tomáš Rohovský</strong> from class <strong>AIK2</strong>.</p>
             <hr class="my-4">
             <div style="margin-left: auto; margin-right: auto;">
-                <p style="text-align: justify;">Welcome to the future of river stream measurement! Our company is at the forefront of this exciting field, providing the <strong>most accurate data on Earth</strong> through our <strong>state-of-the-art gauging stations</strong>. Our gauging stations are not just tools, they are the <strong>epitome of precision and reliability</strong>. They are designed to measure river streams with an <strong>accuracy that is unparalleled in the industry</strong>. This level of precision allows us to provide data that is not only reliable but also actionable, enabling our clients to make informed decisions based on the <strong>most accurate information available</strong>.</p>
+                <p style="text-align: justify;">Welcome to the future of river stream measurement. As a leading innovator in this dynamic field, our company is committed to delivering the <strong>highest level of accuracy</strong> available in the market today. Our <strong>state-of-the-art gauging stations</strong> are not merely tools, but rather, they represent the <strong>gold standard of precision and reliability</strong>. Engineered to measure river streams with an <strong>unmatched level of accuracy</strong>, our gauging stations provide data that is not only reliable but also actionable. This empowers our clients to make informed decisions based on the <strong>most precise information available</strong>. Join us as we continue to redefine the boundaries of precision in river stream measurement.</p>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-primary btn-lg" href="/StationList/List" role="button">Gauging Stations</a>
+                    <a class="btn btn-primary btn-lg" href="/List" role="button">Operating Stations</a>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a class="btn btn-secondary btn-lg" href="/Home/About" role="button">Learn More</a>
+                    <a class="btn btn-secondary btn-lg" href="/About" role="button">Learn More</a>
                 </div>
             </div>
         </div>
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                }
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="/Images/img1.jpg" class="d-block w-100" alt="img1">
-                </div>
-                <div class="carousel-item">
-                    <img src="/Images/img2.jpg" class="d-block w-100" alt="img2">
-                </div>
-                <div class="carousel-item">
-                    <img src="/Images/img3.jpg" class="d-block w-100" alt="img3">
-                </div>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="~/Images/@Model[i]" class="d-block w-100" alt="img@(i + 1)">
+
+                    </div>
+                }
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -74,19 +55,20 @@
         </div>
         <div class="jumbotron mt-5">
             <div style="margin-left: auto; margin-right: auto;">
-                <h2 class="my-4" style="text-align: justify;">Still Not Convinced about Gauging Stations?</h2> <p style=“text-align: justify;”>Are you still relying on traditional river stream measurement methods? It’s time to reconsider. Our state-of-the-art gauging stations are revolutionizing the industry. These stations are not just devices; they are a comprehensive solution designed to provide accurate, reliable, and timely data. This makes them an indispensable tool for water resource management, environmental monitoring, and scientific research.</p>
+                <h2 class="my-4" style="text-align: justify;">The Future of River Stream Measurement</h2>
+                <p style="text-align: justify;">Are you still relying on traditional river stream measurement methods? It’s time to reconsider. Our state-of-the-art gauging stations are revolutionizing the industry. These stations are not just devices; they are a comprehensive solution designed to provide accurate, reliable, and timely data. This makes them an indispensable tool for water resource management, environmental monitoring, and scientific research. Whether you're dealing with a small stream or a mighty river, our gauging stations are designed to handle it all. From compact, lightweight models that can be easily installed by the end consumer, to larger, more complex units that come with full installation support from our expert team, we've got you covered.</p>
 
                 <h2 class="my-4" style="text-align: justify;">Unmatched Accuracy and Reliability</h2>
-                <p style="text-align: justify;">Our gauging stations are more than just tools; they represent the pinnacle of precision and reliability. Equipped with cutting-edge technology, they provide unparalleled accuracy in measuring river streams. This ensures the data you receive is not only dependable but also actionable. Our stations are equipped with high-quality sensors that can withstand extreme weather conditions, ensuring uninterrupted data collection. This reliability extends to all aspects of the station, from the robust construction to the advanced software that powers it.</p>
+                <p style="text-align: justify;">Our gauging stations are more than just tools; they represent the pinnacle of precision and reliability. Equipped with cutting-edge technology, they provide unparalleled accuracy in measuring river streams. This ensures the data you receive is not only dependable but also actionable. Our stations are equipped with high-quality sensors that can withstand extreme weather conditions, ensuring uninterrupted data collection. This reliability extends to all aspects of the station, from the robust construction to the advanced software that powers it. Whether you're using one of our smaller models or a larger unit, you can trust that our gauging stations will deliver accurate, reliable data every time.</p>
 
                 <h2 class="my-4" style="text-align: justify;">Embracing Advanced Technology</h2>
-                <p style="text-align: justify;">It's time to say goodbye to outdated methods and welcome the future with our gauging stations. Our stations are equipped with the latest technology, from advanced sensors to sophisticated data processing algorithms. We capture every detail of the river's flow, delivering high-resolution data that is unmatched by traditional methods. Our stations also feature remote monitoring capabilities, allowing you to access real-time data from anywhere, anytime. This means you can make informed decisions based on the most current information, no matter where you are.</p>
+                <p style="text-align: justify;">It's time to say goodbye to outdated methods and welcome the future with our gauging stations. Our stations are equipped with the latest technology, from advanced sensors to sophisticated data processing algorithms. We capture every detail of the river's flow, delivering high-resolution data that is unmatched by traditional methods. Our stations also feature remote monitoring capabilities, allowing you to access real-time data from anywhere, anytime. This means you can make informed decisions based on the most current information, no matter where you are. From the smallest streams to the largest rivers, our advanced technology ensures you have the data you need when you need it.</p>
 
                 <h2 class="my-4" style="text-align: justify;">Contributing to Global Understanding</h2>
-                <p style="text-align: justify;">Our gauging stations do more than just measure river streams. They play a crucial role in global efforts to understand and address climate change. By providing accurate data on river streams, we contribute to vital research and policymaking aimed at safeguarding our water resources for future generations. Our stations also help in flood forecasting and management, playing a crucial role in disaster risk reduction. By choosing our gauging stations, you're not just investing in a tool; you're investing in a sustainable future.</p>
+                <p style="text-align: justify;">Our gauging stations do more than just measure river streams. They play a crucial role in global efforts to understand and address climate change. By providing accurate data on river streams, we contribute to vital research and policymaking aimed at safeguarding our water resources for future generations. Our stations also help in flood forecasting and management, playing a crucial role in disaster risk reduction. By choosing our gauging stations, you're not just investing in a tool; you're investing in a sustainable future. From the smallest local projects to the largest global initiatives, our gauging stations are helping to shape a better, more sustainable future for us all.</p>
 
                 <h2 class="my-4" style="text-align: justify;">Ease of Installation and Maintenance</h2>
-                <p style="text-align: justify;">We understand that ease of use is as important as performance. That's why our gauging stations are designed for easy installation and low maintenance. They are compact, lightweight, and can be installed in remote locations with minimal infrastructure. The stations are also designed for easy maintenance, with most components easily replaceable in the field. This reduces downtime and ensures continuous data collection. Plus, our dedicated support team is always ready to assist you with any issues that may arise.</p>
+                <p style="text-align: justify;">We understand that ease of use is as important as performance. That's why our gauging stations are designed for easy installation and low maintenance. They are compact, lightweight, and can be installed in remote locations with minimal infrastructure. The stations are also designed for easy maintenance, with most components easily replaceable in the field. This reduces downtime and ensures continuous data collection. Plus, our dedicated support team is always ready to assist you with any issues that may arise. Whether you're installing a small unit on your own or relying on our team for the installation of a larger station, we're here to ensure the process is as smooth and hassle-free as possible.</p>
 
                 <p class="mb-4" style="text-align: justify;"><strong>Are you ready to explore the future of river stream measurement? Join us on this transformative journey today and see the difference our gauging stations can make!</strong></p>
             </div>
