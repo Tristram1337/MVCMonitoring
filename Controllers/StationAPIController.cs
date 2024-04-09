@@ -14,8 +14,48 @@ namespace MVCMonitoring.Controllers
         [HttpGet("get-stations")]
         public IActionResult GetStations()
         {
-            var stations = _context.Stations.Include(s => s.Measurements).ToList();
-            return Ok(stations);
+            var existingStations = _context.Stations
+                .Include(m => m.Measurements)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Title,
+                    m.Location,
+                    m.FloodLevel,
+                    m.DroughtLevel,
+                    m.TimeOutInMinutes,
+
+                    Measurements = m.Measurements.Select(measurement => new
+                    {
+                        measurement.Id,
+                        measurement.WaterLevel,
+                        measurement.DateTime
+                    })
+
+                    .ToList()
+                });
+
+            return Ok(existingStations);
+        }
+
+        [HttpGet("get-stations-nom")]
+        public IActionResult GetStationsNoM()
+        {
+            var existingStations = _context.Stations
+                .Include(m => m.Measurements)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Title,
+                    m.Location,
+                    m.FloodLevel,
+                    m.DroughtLevel,
+                    m.TimeOutInMinutes
+                })
+
+                .ToList();
+
+            return Ok(existingStations);
         }
 
         [HttpPost("add-stations")]
@@ -71,6 +111,7 @@ namespace MVCMonitoring.Controllers
             existingStation.FloodLevel = updatedStation.FloodLevel;
             existingStation.DroughtLevel = updatedStation.DroughtLevel;
             existingStation.TimeOutInMinutes = updatedStation.TimeOutInMinutes;
+
             _context.SaveChanges();
 
             return Ok(existingStation);
@@ -97,7 +138,18 @@ namespace MVCMonitoring.Controllers
         [HttpGet("get-all-measurements")]
         public IActionResult GetAllMeasurements()
         {
-            var allMeasurements = _context.Measurements.ToList();
+            var allMeasurements = _context.Measurements
+                .Include(m => m.Station)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.WaterLevel,
+                    m.DateTime,
+                    m.StationId,
+                    StationTitle = m.Station.Title
+                })
+
+                .ToList();
 
             if (allMeasurements.Count == 0)
             {
@@ -110,7 +162,23 @@ namespace MVCMonitoring.Controllers
         [HttpGet("get-measurement/{measurementId}")]
         public IActionResult GetMeasurement(int measurementId)
         {
-            var existingMeasurement = _context.Measurements.Find(measurementId);
+            var existingMeasurement = _context.Measurements
+                .Include(m => m.Station)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.WaterLevel,
+                    m.DateTime,
+                    m.StationId,
+                    Station = new
+                    {
+                        m.Station.Title,
+                        m.Station.Location
+
+                    }
+                })
+
+                .SingleOrDefault(m => m.Id == measurementId);
 
             if (existingMeasurement == null)
             {
@@ -120,7 +188,7 @@ namespace MVCMonitoring.Controllers
             return Ok(existingMeasurement);
         }
 
-        [HttpPost("add-measurements/{stationId}")]
+        [HttpPost("add-measurement/{stationId}")]
         public IActionResult AddMeasurement(int stationId, Measurement measurement)
         {
             var existingStation = _context.Stations.Find(stationId);
@@ -132,7 +200,7 @@ namespace MVCMonitoring.Controllers
 
             var newMeasurement = new Measurement
             {
-                WaterLevel = measurement.WaterLevel,
+                WaterLevel = measurement.WaterLevel, // Only this value is needed
                 DateTime = DateTime.UtcNow,
                 StationId = stationId
             };
@@ -140,7 +208,21 @@ namespace MVCMonitoring.Controllers
             _context.Measurements.Add(newMeasurement);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetStation), new { id = newMeasurement.Id }, newMeasurement);
+            var result = new
+            {
+                newMeasurement.Id,
+                newMeasurement.WaterLevel,
+                newMeasurement.DateTime,
+                newMeasurement.StationId,
+
+                Station = new
+                {
+                    existingStation.Title,
+                    existingStation.Location
+                }
+            };
+
+            return CreatedAtAction(nameof(GetStation), new { id = newMeasurement.Id }, result);
         }
 
         [HttpPut("update-measurement/{measurementId}")]

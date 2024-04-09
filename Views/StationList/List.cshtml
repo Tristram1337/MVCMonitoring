@@ -16,15 +16,23 @@
             <p>Our system allows you to monitor your stations to keep track of river levels across various locations.</p>
             <hr class="my-4">
         </div>
+        @{
+            var currentTime = DateTime.Now;
+        }
         @foreach (var station in Model)
         {
             var lastMeasurementInWarningZone = false;
+            var timeoutExceeded = false;
             if (station.Measurements != null && station.Measurements.Any())
             {
                 var lastMeasurement = station.Measurements.Last();
                 if (lastMeasurement.WaterLevel < station.DroughtLevel || lastMeasurement.WaterLevel > station.FloodLevel)
                 {
                     lastMeasurementInWarningZone = true;
+                }
+                if ((currentTime - lastMeasurement.DateTime).TotalMinutes > station.TimeOutInMinutes)
+                {
+                    timeoutExceeded = true;
                 }
             }
             <div class="station">
@@ -45,7 +53,15 @@
                         <strong>Drought Level:</strong> @station.DroughtLevel
                     </div>
                     <div class="col-sm text" data-toggle="tooltip" title="@station.TimeOutInMinutes">
-                        <strong>Timeout:</strong> @station.TimeOutInMinutes mins>
+                        <strong>Timeout:</strong>
+                        @if (timeoutExceeded)
+                        {
+                            <span style="color: red;">@station.TimeOutInMinutes mins</span>
+                        }
+                        else
+                        {
+                            <span>@station.TimeOutInMinutes mins</span>
+                        }
                     </div>
                     <div class="col-sm-2">
                         @if (lastMeasurementInWarningZone)
@@ -75,11 +91,11 @@
                                             </div>
                                             @if (m.WaterLevel < station.DroughtLevel)
                                             {
-                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Drought Warning:</strong> Water level is below drought level!</span></div>
+                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Drought Warning:</strong> Water level is below drought level! ↓</span></div>
                                             }
                                             else if (m.WaterLevel > station.FloodLevel)
                                             {
-                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Flood Warning:</strong> Water level is above flood level!</span></div>
+                                                <div style="margin-left: 20px; margin-top: 10px"><span class="text-danger"><strong>Flood Warning:</strong> Water level is above flood level! ↑</span></div>
                                             }
                                         </li>
                                     }

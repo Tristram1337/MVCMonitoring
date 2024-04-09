@@ -1,17 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVCMonitoring.Data;
 using MVCMonitoring.Models;
 using System.Diagnostics;
 
 namespace MVCMonitoring.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ApplicationDbContext context) : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
+        private readonly ApplicationDbContext _context = context;
 
         public IActionResult Index()
         {
@@ -20,6 +17,8 @@ namespace MVCMonitoring.Controllers
                 .Select(file => Path.GetFileName(file))
                 .Where(name => name.StartsWith("Img (") && name.EndsWith(").jpg"))
                 .ToList();
+
+            ViewBag.Stations = new SelectList(_context.Stations, "Id", "Title");
 
             return View(images);
         }

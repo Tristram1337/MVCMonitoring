@@ -20,3 +20,4 @@ namespace MVCMonitoring.Data.Migrations
         }
     }
 }
+// Note: Used Remove-Migration, unfortunately even though its empty, package manager was screaming that there was an error and that it recommends to use Add-Migration. Idk if this can be deleted.

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<StationMeasurementModel>
+@{
+    ViewData["Title"] = "Graph";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/Graph.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/Graph.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+
+    @{
+        var labels = Json.Serialize(Model.Select(x => x.Station.Id));
+        var floodLevels = Json.Serialize(Model.Select(x => x.Station.FloodLevel));
+        var droughtLevels = Json.Serialize(Model.Select(x => x.Station.DroughtLevel));
+        var waterLevels = Json.Serialize(Model.Select(x => x.Measurement.WaterLevel));
+        var dateTime = Json.Serialize(Model.Select(x => x.Measurement.DateTime));
+    }
+
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        var labels = JSON.parse('@Html.Raw(labels)');
+        var floodLevels = JSON.parse('@Html.Raw(floodLevels)');
+        var droughtLevels = JSON.parse('@Html.Raw(droughtLevels)');
+
+        createChart(labels, floodLevels, droughtLevels);
+    </script>
+
+    @{
+        ViewData["Title"] = "Water Levels";
+    }
+    <div>
+        <canvas id="mySecondChart"></canvas>
+    </div>
+    <script>
+        var waterLevels = JSON.parse('@Html.Raw(waterLevels)');
+        createWaterChart(labels, waterLevels);
+    </script>
+
+
+    <div>
+        <canvas id="my3rdChart"></canvas>
+    </div>
+
+    <script>
+        var dateTime = JSON.parse('@Html.Raw(dateTime)');
+        var floodLevelsData = JSON.parse('@Html.Raw(floodLevels)');
+        var droughtLevelsData = JSON.parse('@Html.Raw(droughtLevels)');
+        var waterLevelsData = JSON.parse('@Html.Raw(waterLevels)');
+
+        console.log(dateTime); // Check if dateTime data is correctly parsed
+        console.log(floodLevelsData); // Check if floodLevels data is correctly parsed
+        console.log(droughtLevelsData); // Check if droughtLevels data is correctly parsed
+        console.log(waterLevelsData); // Check if waterLevels data is correctly parsed
+
+        createTimeChart(dateTime, floodLevelsData, droughtLevelsData, waterLevelsData);
+    </script>
+
+
+</body>
+</html>

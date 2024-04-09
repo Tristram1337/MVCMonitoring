@@ -27,27 +27,34 @@
                                 Operations
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><h6 class="dropdown-header">Create</h6></li>
+                                <li><h6 class="dropdown-header">Stations</h6></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="StationOperation" asp-action="CreateStation">Create Station</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="CreateMeasurement">Create Measurement</a></li>
-                                <li><hr class="dropdown-divider"></li>
-
-                                <li><h6 class="dropdown-header">Update</h6></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="StationOperation" asp-action="UpdateStation">Update Station</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="UpdateMeasurement">Update Measurement</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="StationOperation" asp-action="DeleteStation">Delete Station</a></li>
                                 <li><hr class="dropdown-divider"></li>
 
-                                <li><h6 class="dropdown-header">Delete</h6></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="StationOperation" asp-action="DeleteStation">Delete Station</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="DeleteMeasurement">Delete Measurement</a></li>
+                                <li><h6 class="dropdown-header">Measurements</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="CreateMeasurement">Create Measurement</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="UpdateMeasurement">Update Measurement</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="MeasurementOperation" asp-action="DeleteMeasurement">Delete Measurement</a></li>                               
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="StationList" asp-action="List">List of Stations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="StationGallery" asp-action="Gallery">Gallery</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Resources
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><h6 class="dropdown-header">Station Management</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="StationList" asp-action="List">Station Directory</a>
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li><h6 class="dropdown-header">Expert Installations</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="StationGallery" asp-action="Gallery">Installation Showcase</a>
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li><h6 class="dropdown-header">Data Visualization</h6></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="StationGraph" asp-action="Graph">Interactive Graphs</a></li>
+                            </ul>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
