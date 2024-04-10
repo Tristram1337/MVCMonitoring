@@ -1,0 +1,35 @@
+﻿.pie-chart {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+#graph-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.graph-canvas {
+    max-width: 600px;
+    max-height: 400px;
+    margin: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.station-selection {
+    margin: 20px 0;
+}
+
+.station-button {
+    transition: all 0.3s ease;
+}
+
+    .station-button:hover {
+        transform: scale(1.1);
+    }
+
+.station-button-selected {
+    background-color: #007bff;
+    color: white;
+}

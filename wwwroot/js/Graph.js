@@ -1,99 +1,106 @@
-function createChart(labels, floodLevels, droughtLevels) {
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+$(function () {
+    $('.station-button').on("click", function () {
+        $('.station-button').removeClass('active');
+        $(this).addClass('active');
+    });
+});
+
+$(function () {
+    $(".station-button").on("click", function () {
+        var stationId = $(this).data("station-id");
+        $.get("/StationGraph/GetGraphData?stationId=" + stationId, function (data) {
+            var labels = data.map(function (measurement) {
+                return new Date(measurement.dateTime);
+            });
+
+            var waterLevels = data.map(function (measurement) {
+                return measurement.waterLevel;
+            });
+
+            var floodCount = data.filter(function (measurement) {
+                return measurement.waterLevel > measurement.floodLevel;
+            }).length;
+
+            var droughtCount = data.filter(function (measurement) {
+                return measurement.waterLevel < measurement.droughtLevel;
+            }).length;
+            var normalCount = data.length - floodCount - droughtCount;
+
+            $('#myChart, #my2ndChart').remove();
+
+            $('#graph-container').append('<canvas id="myChart" class="graph-canvas"></canvas>');
+            $('#graph-container').append('<canvas id="my2ndChart" class="graph-canvas"></canvas>');
+
+            createChart('myChart', labels, waterLevels, 'Water Level', '#2b83ba');
+            createPieChart('my2ndChart', ['Flood', 'Drought', 'Normal'], [floodCount, droughtCount, normalCount], ['#d7191c', '#fdae61', '#2b83ba']);
+
+        });
+    });
+});
+
+function createChart(canvasId, labels, data, label, color) {
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    var indexLabels = labels.map(function (value, index) {
+        return index;
+    });
+    new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: indexLabels,
             datasets: [{
-                label: 'Flood Levels',
-                data: floodLevels,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
+                label: label,
+                data: data,
+                borderColor: color,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            tooltips: {
+                mode: 'index',
+                intersect: false,
             },
-            {
-                label: 'Drought Levels',
-                data: droughtLevels,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Index'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: label
+                    }
+                }]
             }
         }
     });
 }
 
-function createWaterChart(labels, waterLevels) {
-    var ctx = document.getElementById('mySecondChart').getContext('2d');
-    var mySecondChart = new Chart(ctx, {
-        type: 'line',
+function createPieChart(canvasId, labels, data, colors) {
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Water Levels',
-                data: waterLevels,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                data: data,
+                backgroundColor: colors,
             }]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-}
-
-function createTimeChart(dateTime, floodLevels, droughtLevels, waterLevels) {
-    var ctx = document.getElementById('my3rdChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dateTime,
-            datasets: [
-                {
-                    label: 'Flood Levels',
-                    data: floodLevels,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Drought Levels',
-                    data: droughtLevels,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Water Levels',
-                    data: waterLevels,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day'
-                    }
-                },
-                y: {
-                    beginAtZero: true
-                }
+            responsive: true,
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                text: 'Percentage of Measurements in Each Category'
             }
         }
     });

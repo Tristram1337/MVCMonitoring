@@ -14,6 +14,7 @@
             <h1 class="display-4">Operating Stations</h1>
             <p class="lead">Efficiently Monitor River Levels with Our Advanced System</p>
             <p>Our system allows you to monitor your stations to keep track of river levels across various locations.</p>
+            <p class="lead">Displaying the 10 most recent measurements for efficient and relevant monitoring.</p>
             <hr class="my-4">
         </div>
         @{
@@ -80,7 +81,7 @@
                             @if (station.Measurements != null && station.Measurements.Count > 0)
                             {
                                 <ul class="list-group">
-                                    @foreach (var m in station.Measurements)
+                                    @foreach (var m in station.Measurements.OrderByDescending(m => m.DateTime).Take(10))
                                     {
                                         <li class="list-group-item">
                                             <div>
@@ -105,6 +106,7 @@
                             {
                                 <span>No measurements available</span>
                             }
+
                         </div>
                     </div>
                 </div>
