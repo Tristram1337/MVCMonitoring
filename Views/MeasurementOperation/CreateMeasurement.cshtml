@@ -20,8 +20,9 @@
                 <label for="WaterLevel" class="control-label mt-3">Water Level</label>
                 <input id="WaterLevel" name="WaterLevel" class="form-control" placeholder="Enter water level" required />
             </div>
-            <button class="btn btn-primary mt-3" type="submit">Create Measurement</button>
+            <button type="button" class="btn btn-primary mt-3" onclick="createMeasurement()">Create Measurement</button>
         </form>
     </div>
+    <script src="~/js/Measurement/CreateMeasurement.js" asp-append-version="true"></script>
 </body>
 </html>

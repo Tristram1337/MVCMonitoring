@@ -83,7 +83,6 @@ namespace MVCMonitoring.Controllers
             return CreatedAtAction(nameof(GetStation), new { id = newStation.Id }, newStation);
         }
 
-
         [HttpGet("get-station/{id}")]
         public IActionResult GetStation(int id)
         {

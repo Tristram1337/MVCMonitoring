@@ -29,7 +29,7 @@ namespace MVCMonitoring.Controllers
         }
 
         [HttpPost("CreateStationAction")]
-        public IActionResult CreateStationAction([FromForm] MonitoringStation station)
+        public async Task<IActionResult> CreateStationAction([FromForm] MonitoringStation station)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +40,7 @@ namespace MVCMonitoring.Controllers
 
             if (existingStation != null)
             {
-                return Conflict("A station with this title already exists.");
+                return Conflict(new { message = "A station with this title already exists." });
             }
 
             var newStation = new MonitoringStation
@@ -53,13 +53,13 @@ namespace MVCMonitoring.Controllers
             };
 
             _context.Stations.Add(station);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("List", "StationList");
+            return Ok(new { message = "Station created successfully." });
         }
 
         [HttpPost("UpdateStationAction")]
-        public IActionResult UpdateStationAction([FromForm] MonitoringStation station)
+        public async Task<IActionResult> UpdateStationAction([FromForm] MonitoringStation station)
         {
             if (!ModelState.IsValid)
             {
@@ -80,9 +80,9 @@ namespace MVCMonitoring.Controllers
             existingStation.TimeOutInMinutes = station.TimeOutInMinutes;
 
             _context.Stations.Update(existingStation);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("List", "StationList");
+            return Ok(new { message = "Station updated successfully." });
         }
 
         [HttpPost("DeleteStationAction")]

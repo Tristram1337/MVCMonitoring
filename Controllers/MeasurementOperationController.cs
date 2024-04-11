@@ -29,49 +29,49 @@ namespace MVCMonitoring.Controllers
         }
 
         [HttpPost("CreateMeasurementAction")]
-        public IActionResult CreateMeasurementAction([FromForm] Measurement measurement)
+        public async Task<IActionResult> CreateMeasurementAction([FromForm] Measurement measurement)
         {
             var existingStation = _context.Stations.Find(measurement.StationId);
 
             if (existingStation == null)
             {
-                return NotFound("Station not found.");
+                return NotFound(new { message = "Station with this Id not found." });
             }
 
             var newMeasurement = new Measurement
             {
                 WaterLevel = measurement.WaterLevel,
-                DateTime = DateTime.UtcNow,
+                DateTime = DateTime.Now,
                 StationId = measurement.StationId
             };
 
             _context.Measurements.Add(newMeasurement);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("List", "StationList");
+            return Ok(new { message = "Measurement created successfully." });
         }
 
         [HttpPost("UpdateMeasurementAction")]
-        public IActionResult UpdateMeasurementAction([FromForm] Measurement measurement)
+        public async Task<IActionResult> UpdateMeasurementAction([FromForm] Measurement measurement)
         {
             var existingMeasurement = _context.Measurements.Find(measurement.Id);
 
             if (existingMeasurement == null)
             {
-                return NotFound("Measurement not found.");
+                return NotFound(new { message = "Measurement not found." });
             }
 
             existingMeasurement.WaterLevel = measurement.WaterLevel;
-            existingMeasurement.DateTime = DateTime.UtcNow;
+            existingMeasurement.DateTime = DateTime.Now;
             existingMeasurement.StationId = measurement.StationId;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("List", "StationList");
+            return Ok(new { message = "Measurement updated successfully." });
         }
 
         [HttpPost("DeleteMeasurementAction")]
-        public IActionResult DeleteMeasurementAction([FromForm] int id)
+        public async Task<IActionResult> DeleteMeasurementAction([FromForm] int id)
         {
             var existingMeasurement = _context.Measurements
                 .Where(m => m.Id == id)
@@ -80,14 +80,19 @@ namespace MVCMonitoring.Controllers
 
             if (existingMeasurement == null)
             {
-                return NotFound("Measurement not found.");
+                return NotFound(new { message = "Measurement not found." });
             }
 
-            var measurementToDelete = new Measurement { Id = existingMeasurement.Id, WaterLevel = existingMeasurement.WaterLevel };
-            _context.Measurements.Remove(measurementToDelete);
-            _context.SaveChanges();
+            var measurementToDelete = new Measurement
+            {
+                Id = existingMeasurement.Id,
+                WaterLevel = existingMeasurement.WaterLevel
+            };
 
-            return RedirectToAction("List", "StationList");
+            _context.Measurements.Remove(measurementToDelete);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Measurement successfully deleted." });
         }
     }
 }

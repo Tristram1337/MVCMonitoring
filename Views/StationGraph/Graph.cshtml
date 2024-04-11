@@ -10,13 +10,15 @@
     <link rel="stylesheet" href="~/css/Graph.css" asp-append-version="true" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="~/js/Graph.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="~/js/Graph.js" asp-append-version="true"></script>
 </head>
 <body>
     <main>
         <section class="text-center station-selection">
-            <h2>Select a station Id to view its graphs</h2>
+            <h2 class="station-text">Select a Station ID to View Its Graphs</h2>
+            <p class="site-description">Our platform provides insightful graphs and charts based on the measurements gathered from these stations, aiding in the analysis of river conditions and trends over time. Select a station ID from the options below to access detailed visualizations and gain valuable insights into river health and dynamics.</p>
+            <hr class="my-4">
             <div class="btn-group flex-column flex-md-row" role="group" aria-label="Station buttons">
                 @foreach (var item in ViewBag.Stations)
                 {
