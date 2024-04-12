@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Create Measurement";
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,9 +11,12 @@
 <body>
     <div class="container" style="max-width: 600px;">
         <h1 class="text-center mt-5">Welcome to the Measurement Creation Page</h1>
-        <p class="text-center">You are about to create a new measurement. Please enter the water level, timeout in minutes, date and time, and station ID below.</p>
+        <p class="text-center">
+            <strong>You are about to create a new measurement.</strong><br />
+            Please enter the water level and station ID below.
+        </p>
         <hr />
-        <form asp-action="CreateMeasurementAction" asp-controller="MeasurementOperation" method="post">
+        <form id="form" asp-action="CreateMeasurementAction" asp-controller="MeasurementOperation" method="post">
             <div class="form-group">
                 <label for="StationId" class="control-label mt-3">Station ID</label>
                 <input id="StationId" name="StationId" class="form-control" placeholder="Enter station ID" required />

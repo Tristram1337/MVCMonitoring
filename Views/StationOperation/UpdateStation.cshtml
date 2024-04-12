@@ -11,9 +11,12 @@
 <body>
     <div class="container" style="max-width: 600px;">
         <h1 class="text-center mt-5">Welcome to the Station Update Page</h1>
-        <p class="text-center">You are about to update a monitoring station. Please enter the new details below.</p>
+        <p class="text-center">
+            <strong>You are about to update a monitoring station.</strong><br />
+            Please enter the new details below.
+        </p>
         <hr />
-        <form asp-action="UpdateStationAction" asp-controller="StationOperation" method="post" onsubmit="return validateForm()">
+        <form id="form" asp-action="UpdateStationAction" asp-controller="StationOperation" method="post" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="Id" class="control-label">Station ID</label>
                 <input id="Id" name="Id" class="form-control" placeholder="Enter station's ID" required />

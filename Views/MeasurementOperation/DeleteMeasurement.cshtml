@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Delete Measurement";
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +11,14 @@
 <body>
     <div class="container" style="max-width: 600px;">
         <h1 class="text-center mt-5">Welcome to the Measurement Deletion Page</h1>
-        <p class="text-center">You are about to delete a measurement. Please enter the measurement's ID and station ID below. </p>
+        <p class="text-center">
+            <strong>You are about to delete a measurement.</strong><br />
+            Please enter the measurement's ID below.
+        </p>
         <p class="text-center" style="color: red;"><strong>This action cannot be undone.</strong></p>
         <hr />
-        <form id="deleteForm" asp-action="DeleteMeasurementAction" asp-controller="MeasurementOperation" method="post">
+        <form id="form" asp-action="DeleteMeasurementAction" asp-controller="MeasurementOperation" method="post">
             <div class="form-group">
-                <label for="StationId" class="control-label mt-3">Station ID</label>
-                <input id="StationId" name="StationId" class="form-control" placeholder="Enter station ID" required />
-
                 <label for="Id" class="control-label mt-3">Measurement ID</label>
                 <input id="Id" name="Id" class="form-control" placeholder="Enter measurement's ID" required />
             </div>

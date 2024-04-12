@@ -65,7 +65,7 @@ namespace MVCMonitoring.Controllers
 
             if (existingStation != null)
             {
-                return Conflict("A station with this title already exists.");
+                return BadRequest("A station with this title already exists.");
             }
 
             var newStation = new MonitoringStation
@@ -98,22 +98,29 @@ namespace MVCMonitoring.Controllers
         [HttpPut("update-station/{id}")]
         public IActionResult UpdateStation(int id, MonitoringStation updatedStation)
         {
-            var existingStation = _context.Stations.Find(id);
+            var existingStation = _context.Stations.FirstOrDefault(s => s.Id != id && s.Title == updatedStation.Title);
 
-            if (existingStation == null)
+            if (existingStation != null)
+            {
+                return BadRequest("A station with this title already exists.");
+            }
+
+            var stationToUpdate = _context.Stations.Find(id);
+
+            if (stationToUpdate == null)
             {
                 return NotFound();
             }
 
-            existingStation.Title = updatedStation.Title;
-            existingStation.Location = updatedStation.Location;
-            existingStation.FloodLevel = updatedStation.FloodLevel;
-            existingStation.DroughtLevel = updatedStation.DroughtLevel;
-            existingStation.TimeOutInMinutes = updatedStation.TimeOutInMinutes;
+            stationToUpdate.Title = updatedStation.Title;
+            stationToUpdate.Location = updatedStation.Location;
+            stationToUpdate.FloodLevel = updatedStation.FloodLevel;
+            stationToUpdate.DroughtLevel = updatedStation.DroughtLevel;
+            stationToUpdate.TimeOutInMinutes = updatedStation.TimeOutInMinutes;
 
             _context.SaveChanges();
 
-            return Ok(existingStation);
+            return Ok(stationToUpdate);
         }
 
         [HttpDelete("delete-station/{id}")]
@@ -134,7 +141,7 @@ namespace MVCMonitoring.Controllers
 
         // MEASUREMENTS //
 
-        [HttpGet("get-all-measurements")]
+        [HttpGet("get-measurements")]
         public IActionResult GetAllMeasurements()
         {
             var allMeasurements = _context.Measurements
@@ -173,7 +180,6 @@ namespace MVCMonitoring.Controllers
                     {
                         m.Station.Title,
                         m.Station.Location
-
                     }
                 })
 
@@ -199,8 +205,8 @@ namespace MVCMonitoring.Controllers
 
             var newMeasurement = new Measurement
             {
-                WaterLevel = measurement.WaterLevel, // Only this value is needed
-                DateTime = DateTime.UtcNow,
+                WaterLevel = measurement.WaterLevel, // Only this value is needed for api
+                DateTime = DateTime.Now,
                 StationId = stationId
             };
 
@@ -235,7 +241,7 @@ namespace MVCMonitoring.Controllers
             }
 
             existingMeasurement.WaterLevel = updatedMeasurement.WaterLevel;
-            existingMeasurement.DateTime = DateTime.UtcNow;
+            existingMeasurement.DateTime = DateTime.Now;
 
             _context.SaveChanges();
 

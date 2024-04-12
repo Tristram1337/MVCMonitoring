@@ -63,7 +63,6 @@ namespace MVCMonitoring.Controllers
 
             existingMeasurement.WaterLevel = measurement.WaterLevel;
             existingMeasurement.DateTime = DateTime.Now;
-            existingMeasurement.StationId = measurement.StationId;
 
             await _context.SaveChangesAsync();
 

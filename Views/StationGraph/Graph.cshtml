@@ -6,18 +6,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/Graph.css" asp-append-version="true" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="~/js/Graph.js" asp-append-version="true"></script>
 </head>
 <body>
     <main>
         <section class="text-center station-selection">
             <h2 class="station-text">Select a Station ID to View Its Graphs</h2>
-            <p class="site-description">Our platform provides insightful graphs and charts based on the measurements gathered from these stations, aiding in the analysis of river conditions and trends over time. Select a station ID from the options below to access detailed visualizations and gain valuable insights into river health and dynamics.</p>
+            <p class="site-description"><strong>Select a station ID</strong> from the options below to access detailed visualizations and gain valuable insights into river health. <br />Our platform provides insightful graphs and charts based on the measurements gathered from these stations. </p>
             <hr class="my-4">
             <div class="btn-group flex-column flex-md-row" role="group" aria-label="Station buttons">
                 @foreach (var item in ViewBag.Stations)

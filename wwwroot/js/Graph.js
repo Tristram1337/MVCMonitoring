@@ -9,6 +9,11 @@ $(function () {
     $(".station-button").on("click", function () {
         var stationId = $(this).data("station-id");
         $.get("/StationGraph/GetGraphData?stationId=" + stationId, function (data) {
+            if (data.length === 0) {
+                alert('This station currently has no available data.');
+                return;
+            }
+
             var labels = data.map(function (measurement) {
                 return new Date(measurement.dateTime);
             });
@@ -17,12 +22,15 @@ $(function () {
                 return measurement.waterLevel;
             });
 
+            var floodLevel = data[0].floodLevel;
+            var droughtLevel = data[0].droughtLevel;
+
             var floodCount = data.filter(function (measurement) {
-                return measurement.waterLevel > measurement.floodLevel;
+                return measurement.waterLevel > floodLevel;
             }).length;
 
             var droughtCount = data.filter(function (measurement) {
-                return measurement.waterLevel < measurement.droughtLevel;
+                return measurement.waterLevel < droughtLevel;
             }).length;
             var normalCount = data.length - floodCount - droughtCount;
 
@@ -31,18 +39,18 @@ $(function () {
             $('#graph-container').append('<canvas id="myChart" class="graph-canvas"></canvas>');
             $('#graph-container').append('<canvas id="my2ndChart" class="graph-canvas"></canvas>');
 
-            createChart('myChart', labels, waterLevels, 'Water Level', '#2b83ba');
+            createChart('myChart', labels, waterLevels, 'Water Level', '#2b83ba', floodLevel, droughtLevel);
             createPieChart('my2ndChart', ['Flood', 'Drought', 'Normal'], [floodCount, droughtCount, normalCount], ['#d7191c', '#fdae61', '#2b83ba']);
-
         });
     });
 });
 
-function createChart(canvasId, labels, data, label, color) {
+function createChart(canvasId, labels, data, label, color, floodLevel, droughtLevel) {
     var ctx = document.getElementById(canvasId).getContext('2d');
     var indexLabels = labels.map(function (value, index) {
         return index;
     });
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -52,6 +60,28 @@ function createChart(canvasId, labels, data, label, color) {
                 data: data,
                 borderColor: color,
                 fill: false
+            },
+            {
+                label: 'Flood Level',
+                data: floodLevel ? Array(data.length).fill(floodLevel) : [],
+                borderColor: '#d7191c',
+                borderWidth: 1,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 1,
+                pointHoverRadius: 3,
+                showLine: true
+            },
+            {
+                label: 'Drought Level',
+                data: droughtLevel ? Array(data.length).fill(droughtLevel) : [],
+                borderColor: '#FF5733',
+                borderWidth: 1,
+                borderDash: [5, 5],
+                fill: false,
+                pointRadius: 1,
+                pointHoverRadius: 3,
+                showLine: true
             }]
         },
         options: {
@@ -65,20 +95,25 @@ function createChart(canvasId, labels, data, label, color) {
                 intersect: true
             },
             scales: {
-                xAxes: [{
+                x: {
                     display: true,
-                    scaleLabel: {
+                    title: {
                         display: true,
-                        labelString: 'Index'
+                        text: 'Index'
                     }
-                }],
-                yAxes: [{
+                },
+                y: {
                     display: true,
-                    scaleLabel: {
+                    title: {
                         display: true,
-                        labelString: label
+                        text: label
+                    },
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        stepSize: 10
                     }
-                }]
+                }
             }
         }
     });

@@ -31,9 +31,9 @@ namespace MVCMonitoring.Controllers
                 .Select(m => new
                 {
                     m.DateTime,
+                    m.WaterLevel,
                     m.Station.FloodLevel,
-                    m.Station.DroughtLevel,
-                    m.WaterLevel
+                    m.Station.DroughtLevel
                 })
                 .ToList();
 

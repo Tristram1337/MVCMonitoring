@@ -11,13 +11,13 @@
 <body>
     <div class="container" style="max-width: 600px;">
         <h1 class="text-center mt-5">Welcome to the Measurement Update Page</h1>
-        <p class="text-center">You are about to update a measurement. Please enter the new details below.</p>
+        <p class="text-center">
+            <strong>You are about to update a measurement.</strong><br />
+            Please enter the new details below.
+        </p>
         <hr />
-        <form asp-action="UpdateMeasurementAction" asp-controller="MeasurementOperation" method="post">
+        <form id="form" asp-action="UpdateMeasurementAction" asp-controller="MeasurementOperation" method="post">
             <div class="form-group">
-                <label for="StationId" class="control-label mt-3">Station ID</label>
-                <input id="StationId" name="StationId" class="form-control" placeholder="Enter station ID" required />
-
                 <label for="Id" class="control-label mt-3">Measurement ID</label>
                 <input id="Id" name="Id" class="form-control" placeholder="Enter measurement ID" required />
 

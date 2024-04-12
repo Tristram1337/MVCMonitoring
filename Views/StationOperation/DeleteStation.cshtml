@@ -11,16 +11,16 @@
 <body>
     <div class="container" style="max-width: 600px;">
         <h1 class="text-center mt-5">Welcome to the Station Deletion Page</h1>
-        <p class="text-center">You are about to delete a monitoring station. Please enter the station's ID and title below. </p>
+        <p class="text-center">
+            <strong>You are about to delete a monitoring station.</strong><br />
+            Please enter the station's ID.
+        </p>
         <p class="text-center" style="color: red;"><strong>This action cannot be undone.</strong></p>
         <hr />
-        <form id="deleteForm" asp-action="DeleteStationAction" asp-controller="StationOperation" method="post">
+        <form id="form" asp-action="DeleteStationAction" asp-controller="StationOperation" method="post">
             <div class="form-group">
                 <label for="Id" class="control-label">Station ID</label>
                 <input id="Id" name="Id" class="form-control" placeholder="Enter station's ID" required />
-
-                <label for="Title" class="control-label mt-3">Station Title</label>
-                <input id="Title" name="Title" class="form-control" placeholder="Enter station's title" required />
             </div>
             <button type="button" class="btn btn-danger" onclick="deleteStation()">Delete Station</button>
         </form>
